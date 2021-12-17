@@ -6,8 +6,8 @@ public class MapData {
     public static final int TYPE_WALL = 1;
     public static final int TYPE_OTHERS = 2;
     private static final String mapImageFiles[] = {
-        "png/SPACE.png",
-        "png/WALL.png"
+            "png/SPACE.png",
+            "png/WALL.png"
     };
 
     private Image[] mapImages;
@@ -16,10 +16,10 @@ public class MapData {
     private int width;
     private int height;
 
-    MapData(int x, int y){
+    MapData(int x, int y) {
         mapImages = new Image[2];
         mapImageViews = new ImageView[y][x];
-        for (int i=0; i<2; i++) {
+        for (int i = 0; i < 2; i++) {
             mapImages[i] = new Image(mapImageFiles[i]);
         }
 
@@ -32,11 +32,11 @@ public class MapData {
         setImageViews();
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return height;
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return width;
     }
 
@@ -51,50 +51,50 @@ public class MapData {
         return mapImageViews[y][x];
     }
 
-    public void setMap(int x, int y, int type){
-        if (x < 1 || width <= x-1 || y < 1 || height <= y-1) {
+    public void setMap(int x, int y, int type) {
+        if (x < 1 || width <= x - 1 || y < 1 || height <= y - 1) {
             return;
         }
         maps[y][x] = type;
     }
 
-	// set images based on two-dimentional arrays (maps[y][x])
+    // set images based on two-dimentional arrays (maps[y][x])
     public void setImageViews() {
-        for (int y=0; y<height; y++) {
-            for (int x=0; x<width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 mapImageViews[y][x] = new ImageView(mapImages[maps[y][x]]);
             }
         }
     }
 
-	// fill two-dimentional arrays with a given number (maps[y][x])
-    public void fillMap(int type){
-        for (int y=0; y<height; y++){
-            for (int x=0; x<width; x++){
+    // fill two-dimentional arrays with a given number (maps[y][x])
+    public void fillMap(int type) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 maps[y][x] = type;
             }
         }
     }
 
-	// dig walls for creating trails
-    public void digMap(int x, int y){
+    // dig walls for creating trails
+    public void digMap(int x, int y) {
         setMap(x, y, MapData.TYPE_SPACE);
-        int[][] dl = {{0,1},{0,-1},{-1,0},{1,0}};
+        int[][] dl = { { 0, 1 }, { 0, -1 }, { -1, 0 }, { 1, 0 } };
         int[] tmp;
 
-        for (int i=0; i<dl.length; i++) {
-            int r = (int)(Math.random()*dl.length);
+        for (int i = 0; i < dl.length; i++) {
+            int r = (int) (Math.random() * dl.length);
             tmp = dl[i];
             dl[i] = dl[r];
             dl[r] = tmp;
         }
 
-        for (int i=0; i<dl.length; i++){
+        for (int i = 0; i < dl.length; i++) {
             int dx = dl[i][0];
             int dy = dl[i][1];
-            if (getMap(x+dx*2, y+dy*2) == MapData.TYPE_WALL){
-                setMap(x+dx, y+dy, MapData.TYPE_SPACE);
-                digMap(x+dx*2, y+dy*2);
+            if (getMap(x + dx * 2, y + dy * 2) == MapData.TYPE_WALL) {
+                setMap(x + dx, y + dy, MapData.TYPE_SPACE);
+                digMap(x + dx * 2, y + dy * 2);
 
             }
         }

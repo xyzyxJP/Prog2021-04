@@ -15,9 +15,9 @@
     <HBox prefHeight="50">
       <children>
 	<Button text="func1" prefWidth="100" onAction="#func1ButtonAction"/>
-	<Button text="func2" prefWidth="100" onAction="#func2ButtonAction"/>
-	<Button text="func3" prefWidth="100" onAction="#func3ButtonAction"/>
-	<Button text="func4" prefWidth="100" onAction="#func4ButtonAction"/>
+	<Button text="func2" prefWidth="100"/>
+	<Button text="func3" prefWidth="100"/>
+	<Button text="func4" prefWidth="100"/>
       </children>
     </HBox>
     <GridPane fx:id="mapGrid" prefWidth="360" prefHeight="360" >
