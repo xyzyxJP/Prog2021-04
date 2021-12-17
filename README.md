@@ -6,7 +6,7 @@
 
 # Documentation
 
-## How To
+## GitHubの説明
 
 1. 下記のリンクを参考にGitHubのアカウントを作成してください  
 [https://qiita.com/ayatokura/items/9eabb7ae20752e6dc79d](https://qiita.com/ayatokura/items/9eabb7ae20752e6dc79d)
