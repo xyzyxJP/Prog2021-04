@@ -100,6 +100,18 @@ public class MapGameController implements Initializable {
         System.out.println("func1: Nothing to do");
     }
 
+    public void func2ButtonAction(ActionEvent event) {
+        System.out.println("func2: Nothing to do");
+    }
+
+    public void func3ButtonAction(ActionEvent event) {
+        System.out.println("func3: Nothing to do");
+    }
+
+    public void func4ButtonAction(ActionEvent event) {
+        System.out.println("func4: Nothing to do");
+    }
+
     // Print actions of user inputs
     public void printAction(String actionString) {
         System.out.println("Action: " + actionString);
