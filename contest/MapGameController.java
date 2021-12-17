@@ -53,14 +53,27 @@ public class MapGameController implements Initializable {
     public void keyAction(KeyEvent event) {
         KeyCode key = event.getCode();
         System.out.println("keycode:" + key);
-        if (key == KeyCode.H || key == KeyCode.A) {
-            leftButtonAction();
-        } else if (key == KeyCode.J || key == KeyCode.S) {
-            downButtonAction();
-        } else if (key == KeyCode.K || key == KeyCode.W) {
-            upButtonAction();
-        } else if (key == KeyCode.L || key == KeyCode.D) {
-            rightButtonAction();
+        switch (key) {
+            case H:
+            case A:
+                leftButtonAction();
+                break;
+            case J:
+            case S:
+                downButtonAction();
+                break;
+            case K:
+            case W:
+                upButtonAction();
+                break;
+            case L:
+            case D:
+                rightButtonAction();
+                break;
+            case DELETE:
+            case BACK_SPACE:
+                remapButtonAction();
+                break;
         }
     }
 
@@ -96,18 +109,13 @@ public class MapGameController implements Initializable {
         drawMap(chara, mapData);
     }
 
-    public void func1ButtonAction(ActionEvent event) {
+    public void remapButtonAction() {
         printAction("REMAP");
-        mapData = new MapData(21, 15);
-        chara = new MoveChara(1, 1, mapData);
-        mapImageViews = new ImageView[mapData.getHeight() * mapData.getWidth()];
-        for (int y = 0; y < mapData.getHeight(); y++) {
-            for (int x = 0; x < mapData.getWidth(); x++) {
-                int index = y * mapData.getWidth() + x;
-                mapImageViews[index] = mapData.getImageView(x, y);
-            }
-        }
-        drawMap(chara, mapData);
+        initialize(null, null);
+    }
+
+    public void func1ButtonAction(ActionEvent event) {
+        System.out.println("func2: Nothing to do");
     }
 
     public void func2ButtonAction(ActionEvent event) {
