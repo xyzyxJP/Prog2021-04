@@ -22,25 +22,25 @@ public class MapGameController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         mapData = new MapData(21, 15);
         chara = new MoveChara(1, 1, mapData);
-        mapImageViews = new ImageView[mapData.getHeight()*mapData.getWidth()];
-        for(int y=0; y<mapData.getHeight(); y++){
-            for(int x=0; x<mapData.getWidth(); x++){
-                int index = y*mapData.getWidth() + x;
-                mapImageViews[index] = mapData.getImageView(x,y);
+        mapImageViews = new ImageView[mapData.getHeight() * mapData.getWidth()];
+        for (int y = 0; y < mapData.getHeight(); y++) {
+            for (int x = 0; x < mapData.getWidth(); x++) {
+                int index = y * mapData.getWidth() + x;
+                mapImageViews[index] = mapData.getImageView(x, y);
             }
         }
         drawMap(chara, mapData);
     }
 
     // Draw the map
-    public void drawMap(MoveChara c, MapData m){
+    public void drawMap(MoveChara c, MapData m) {
         int cx = c.getPosX();
         int cy = c.getPosY();
         mapGrid.getChildren().clear();
-        for(int y=0; y<mapData.getHeight(); y++){
-            for(int x=0; x<mapData.getWidth(); x++){
-                int index = y*mapData.getWidth() + x;
-                if (x==cx && y==cy) {
+        for (int y = 0; y < mapData.getHeight(); y++) {
+            for (int x = 0; x < mapData.getWidth(); x++) {
+                int index = y * mapData.getWidth() + x;
+                if (x == cx && y == cy) {
                     mapGrid.add(c.getCharaImageView(), x, y);
                 } else {
                     mapGrid.add(mapImageViews[index], x, y);
@@ -50,21 +50,22 @@ public class MapGameController implements Initializable {
     }
 
     // Get users key actions
-    public void keyAction(KeyEvent event){
-        KeyCode key = event.getCode(); System.out.println("keycode:"+key);
-        if (key == KeyCode.H){
-        	leftButtonAction();
-        }else if (key == KeyCode.J){
-            downButtonAction(); 
-        }else if (key == KeyCode.K){
+    public void keyAction(KeyEvent event) {
+        KeyCode key = event.getCode();
+        System.out.println("keycode:" + key);
+        if (key == KeyCode.H || key == KeyCode.A) {
+            leftButtonAction();
+        } else if (key == KeyCode.J || key == KeyCode.S) {
+            downButtonAction();
+        } else if (key == KeyCode.K || key == KeyCode.W) {
             upButtonAction();
-        }else if (key == KeyCode.L){
+        } else if (key == KeyCode.L || key == KeyCode.D) {
             rightButtonAction();
         }
     }
 
     // Operations for going the cat down
-    public void upButtonAction(){
+    public void upButtonAction() {
         printAction("UP");
         chara.setCharaDirection(MoveChara.TYPE_UP);
         chara.move(0, -1);
@@ -72,7 +73,7 @@ public class MapGameController implements Initializable {
     }
 
     // Operations for going the cat down
-    public void downButtonAction(){
+    public void downButtonAction() {
         printAction("DOWN");
         chara.setCharaDirection(MoveChara.TYPE_DOWN);
         chara.move(0, 1);
@@ -80,7 +81,7 @@ public class MapGameController implements Initializable {
     }
 
     // Operations for going the cat right
-    public void leftButtonAction(){
+    public void leftButtonAction() {
         printAction("LEFT");
         chara.setCharaDirection(MoveChara.TYPE_LEFT);
         chara.move(-1, 0);
@@ -88,7 +89,7 @@ public class MapGameController implements Initializable {
     }
 
     // Operations for going the cat right
-    public void rightButtonAction(){
+    public void rightButtonAction() {
         printAction("RIGHT");
         chara.setCharaDirection(MoveChara.TYPE_RIGHT);
         chara.move(1, 0);
