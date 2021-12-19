@@ -54,6 +54,12 @@ public class MapGameController implements Initializable {
         int moveCharaPositionY = moveChara.GetPositionY();
         int itemType = mapData.GetItemType(moveCharaPositionX, moveCharaPositionY);
         switch (itemType) {
+            case MapData.ITEM_TYPE_PORTAL:
+                printAction("PORTAL");
+                moveChara.SetPositionX(1);
+                moveChara.SetPositionY(1);
+                mapData.SetItemType(moveCharaPositionX, moveCharaPositionY, MapData.ITEM_TYPE_NULL);
+                break;
             case default:
                 if (itemType != MapData.ITEM_TYPE_NULL && itemType != MapData.ITEM_TYPE_GOAL) {
                     printAction("GET");

@@ -94,6 +94,14 @@ public class MoveChara {
         return positionY;
     }
 
+    public void SetPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    public void SetPositionY(int positionY) {
+        this.positionY = positionY;
+    }
+
     public void AddItem(int itemType) {
         switch (itemType) {
             default:
