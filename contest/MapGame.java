@@ -1,20 +1,28 @@
 import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
+import javafx.stage.WindowEvent;
 
 public class MapGame extends Application {
     Stage stage;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        stage = primaryStage;
-        primaryStage.setTitle("MAP GAME");
-        Pane myPane_top = (Pane) FXMLLoader.load(getClass().getResource("MapGame.fxml"));
-        Scene myScene = new Scene(myPane_top);
-        primaryStage.setScene(myScene);
-        primaryStage.show();
+    public void start(Stage stage) throws Exception {
+        this.stage = stage;
+        stage.setTitle("MAP GAME");
+        Pane pane = (Pane) FXMLLoader.load(getClass().getResource("fxml/MapGame.fxml"));
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                System.exit(0);
+            }
+        });
+        stage.show();
     }
 
     public static void main(String[] args) {

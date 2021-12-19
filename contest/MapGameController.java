@@ -1,121 +1,178 @@
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.Group;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 
 public class MapGameController implements Initializable {
     public MapData mapData;
-    public MoveChara chara;
-    public GridPane mapGrid;
-    public ImageView[] mapImageViews;
+    public MoveChara moveChara;
+    public GridPane mapGridPane;
+    public GridPane itemGridPane;
+    public Label scoreLabel;
+    public Label timeLabel;
+
+    public Timer timer;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         mapData = new MapData(21, 15);
-        chara = new MoveChara(1, 1, mapData);
-        mapImageViews = new ImageView[mapData.getHeight() * mapData.getWidth()];
-        for (int y = 0; y < mapData.getHeight(); y++) {
-            for (int x = 0; x < mapData.getWidth(); x++) {
-                int index = y * mapData.getWidth() + x;
-                mapImageViews[index] = mapData.getImageView(x, y);
-            }
+        moveChara = new MoveChara(1, 1, mapData);
+        DrawMap(moveChara, mapData);
+        if (timer != null) {
+            timer.cancel();
         }
-        drawMap(chara, mapData);
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    long remainingTime = mapData.GetRemainingTime();
+                    timeLabel.setText(String.valueOf(remainingTime));
+                    if (remainingTime <= 0) {
+                        timer.cancel();
+                        OverButtonAction();
+                        return;
+                    }
+                });
+            }
+        }, 0, 500);
     }
 
-    // Draw the map
-    public void drawMap(MoveChara c, MapData m) {
-        int cx = c.getPosX();
-        int cy = c.getPosY();
-        mapGrid.getChildren().clear();
-        for (int y = 0; y < mapData.getHeight(); y++) {
-            for (int x = 0; x < mapData.getWidth(); x++) {
-                int index = y * mapData.getWidth() + x;
-                if (x == cx && y == cy) {
-                    mapGrid.add(c.getCharaImageView(), x, y);
+    public void DrawMap(MoveChara moveChara, MapData mapData) {
+        int moveCharaPositionX = moveChara.GetPositionX();
+        int moveCharaPositionY = moveChara.GetPositionY();
+        int itemType = mapData.GetItemType(moveCharaPositionX, moveCharaPositionY);
+        switch (itemType) {
+            case default:
+                if (itemType != MapData.ITEM_TYPE_NULL) {
+                    printAction("GET");
+                    moveChara.AddItem(itemType);
+                    mapData.SetItemType(moveCharaPositionX, moveCharaPositionY, MapData.ITEM_TYPE_NULL);
+                }
+                break;
+        }
+
+        moveCharaPositionX = moveChara.GetPositionX();
+        moveCharaPositionY = moveChara.GetPositionY();
+        mapGridPane.getChildren().clear();
+        for (int y = 0; y < mapData.GetHeight(); y++) {
+            for (int x = 0; x < mapData.GetWidth(); x++) {
+                if (x == moveCharaPositionX && y == moveCharaPositionY) {
+                    mapGridPane.add(moveChara.GetCharaImageView(), x, y);
                 } else {
-                    mapGrid.add(mapImageViews[index], x, y);
+                    mapGridPane.add(mapData.GetMapItemImageView(x, y), x, y);
                 }
             }
         }
+        itemGridPane.getChildren().clear();
+        ArrayList<Integer> itemInventory = moveChara.GetItemInventory();
+        for (int i = 0; i < itemInventory.size(); i++) {
+            itemGridPane.add(mapData.GetItemImageView(itemInventory.get(i)), i, 0);
+        }
+        scoreLabel.setText(String.valueOf(moveChara.GetScore()));
+
+        if (itemType == MapData.ITEM_TYPE_GOAL) {
+            if (moveChara.GetItemInventory().contains(MapData.ITEM_TYPE_KEY)) {
+                printAction("CLEAR");
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("Clear!");
+                alert.showAndWait();
+                moveChara.AddScore(1000);
+                RemapButtonAction();
+            }
+        }
     }
 
-    // Get users key actions
-    public void keyAction(KeyEvent event) {
-        KeyCode key = event.getCode();
-        System.out.println("keycode:" + key);
-        switch (key) {
+    public void KeyAction(KeyEvent keyEvent) {
+        KeyCode keyCode = keyEvent.getCode();
+        System.out.println("KeyCode:" + keyCode);
+        switch (keyCode) {
             case H:
             case A:
-                leftButtonAction();
+                LeftButtonAction();
                 break;
             case J:
             case S:
-                downButtonAction();
+                DownButtonAction();
                 break;
             case K:
             case W:
-                upButtonAction();
+                UpButtonAction();
                 break;
             case L:
             case D:
-                rightButtonAction();
+                RightButtonAction();
                 break;
+            case R:
             case DELETE:
             case BACK_SPACE:
-                remapButtonAction();
+                RemapButtonAction();
+                break;
+            case ESCAPE:
+                System.exit(0);
+            default:
                 break;
         }
     }
 
-    // Operations for going the cat down
-    public void upButtonAction() {
+    public void UpButtonAction() {
         printAction("UP");
-        chara.setCharaDirection(MoveChara.TYPE_UP);
-        chara.move(0, -1);
-        drawMap(chara, mapData);
+        moveChara.SetCharaDirection(MoveChara.TYPE_UP);
+        moveChara.Move(MoveChara.TYPE_UP);
+        DrawMap(moveChara, mapData);
     }
 
-    // Operations for going the cat down
-    public void downButtonAction() {
+    public void DownButtonAction() {
         printAction("DOWN");
-        chara.setCharaDirection(MoveChara.TYPE_DOWN);
-        chara.move(0, 1);
-        drawMap(chara, mapData);
+        moveChara.SetCharaDirection(MoveChara.TYPE_DOWN);
+        moveChara.Move(MoveChara.TYPE_DOWN);
+        DrawMap(moveChara, mapData);
     }
 
-    // Operations for going the cat right
-    public void leftButtonAction() {
+    public void LeftButtonAction() {
         printAction("LEFT");
-        chara.setCharaDirection(MoveChara.TYPE_LEFT);
-        chara.move(-1, 0);
-        drawMap(chara, mapData);
+        moveChara.SetCharaDirection(MoveChara.TYPE_LEFT);
+        moveChara.Move(MoveChara.TYPE_LEFT);
+        DrawMap(moveChara, mapData);
     }
 
-    // Operations for going the cat right
-    public void rightButtonAction() {
+    public void RightButtonAction() {
         printAction("RIGHT");
-        chara.setCharaDirection(MoveChara.TYPE_RIGHT);
-        chara.move(1, 0);
-        drawMap(chara, mapData);
+        moveChara.SetCharaDirection(MoveChara.TYPE_RIGHT);
+        moveChara.Move(MoveChara.TYPE_RIGHT);
+        DrawMap(moveChara, mapData);
     }
 
-    public void remapButtonAction() {
+    public void RemapButtonAction() {
         printAction("REMAP");
         initialize(null, null);
     }
 
+    public void OverButtonAction() {
+        printAction("OVER");
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText("Game Over!\n" + "Score : " + String.valueOf(moveChara.GetScore()));
+        alert.showAndWait();
+        moveChara.ResetScore();
+        mapData.ResetTimeLimit();
+        RemapButtonAction();
+    }
+
     public void func1ButtonAction(ActionEvent event) {
-        System.out.println("func2: Nothing to do");
+        System.out.println("func1: Nothing to do");
     }
 
     public void func2ButtonAction(ActionEvent event) {
@@ -130,9 +187,7 @@ public class MapGameController implements Initializable {
         System.out.println("func4: Nothing to do");
     }
 
-    // Print actions of user inputs
     public void printAction(String actionString) {
         System.out.println("Action: " + actionString);
     }
-
 }

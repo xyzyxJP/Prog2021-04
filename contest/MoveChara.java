@@ -1,21 +1,27 @@
+import java.util.ArrayList;
+
+import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Rectangle;
-import javafx.animation.AnimationTimer;
 
 public class MoveChara {
-    public static final int TYPE_DOWN = 0;
-    public static final int TYPE_LEFT = 1;
-    public static final int TYPE_RIGHT = 2;
-    public static final int TYPE_UP = 3;
+    public static final int[][] VECTORS = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+    public static final int TYPE_UP = 0;
+    public static final int TYPE_DOWN = 1;
+    public static final int TYPE_LEFT = 2;
+    public static final int TYPE_RIGHT = 3;
 
-    private final String[] directions = { "Down", "Left", "Right", "Up" };
+    private final String[] directions = { "up", "down", "left", "right" };
     private final String[] animationNumbers = { "1", "2", "3" };
-    private final String pngPathBefore = "png/cat";
-    private final String pngPathAfter = ".png";
+    private final String imagePathCat = "image/cat/";
+    private final String imagePathExt = ".png";
 
-    private int posX;
-    private int posY;
+    private int positionX;
+    private int positionY;
+
+    private static int score = 0;
+
+    private ArrayList<Integer> itemInventory = new ArrayList<Integer>();
 
     private MapData mapData;
 
@@ -35,21 +41,20 @@ public class MoveChara {
         for (int i = 0; i < 4; i++) {
             charaImages[i] = new Image[3];
             for (int j = 0; j < 3; j++) {
-                charaImages[i][j] = new Image(pngPathBefore + directions[i] + animationNumbers[j] + pngPathAfter);
+                charaImages[i][j] = new Image(imagePathCat + directions[i] + animationNumbers[j] + imagePathExt);
             }
             charaImageViews[i] = new ImageView(charaImages[i][0]);
             charaImageAnimations[i] = new ImageAnimation(charaImageViews[i], charaImages[i]);
         }
 
-        posX = startX;
-        posY = startY;
+        positionX = startX;
+        positionY = startY;
 
-        setCharaDirection(TYPE_RIGHT); // start from the image of right-direction
+        SetCharaDirection(TYPE_RIGHT);
     }
 
-    // set the cat's image of a direction
-    public void setCharaDirection(int cd) {
-        charaDirection = cd;
+    public void SetCharaDirection(int charaDirection) {
+        this.charaDirection = charaDirection;
         for (int i = 0; i < 4; i++) {
             if (i == charaDirection) {
                 charaImageAnimations[i].start();
@@ -59,49 +64,78 @@ public class MoveChara {
         }
     }
 
-    // check the place where the cat will go
-    public boolean isMovable(int dx, int dy) {
-        if (mapData.getMap(posX + dx, posY + dy) == MapData.TYPE_WALL) {
-            return false;
-        } else if (mapData.getMap(posX + dx, posY + dy) == MapData.TYPE_SPACE) {
+    public boolean CanMove(int charaDirection) {
+        if (mapData.GetMapType(positionX + VECTORS[charaDirection][1],
+                positionY + VECTORS[charaDirection][0]) == MapData.MAP_TYPE_SPACE) {
             return true;
         }
         return false;
     }
 
-    // move the cat
-    public boolean move(int dx, int dy) {
-        if (isMovable(dx, dy)) {
-            posX += dx;
-            posY += dy;
+    public boolean Move(int charaDirection) {
+        if (CanMove(charaDirection)) {
+            positionX += VECTORS[charaDirection][1];
+            positionY += VECTORS[charaDirection][0];
             return true;
         } else {
             return false;
         }
     }
 
-    public ImageView getCharaImageView() {
+    public ImageView GetCharaImageView() {
         return charaImageViews[charaDirection];
     }
 
-    // getter: x-positon of the cat
-    public int getPosX() {
-        return posX;
+    public int GetPositionX() {
+        return positionX;
     }
 
-    // getter: y-positon of the cat
-    public int getPosY() {
-        return posY;
+    public int GetPositionY() {
+        return positionY;
     }
 
-    // Draw the cat animation
+    public void AddItem(int itemType) {
+        switch (itemType) {
+            default:
+                AddScore(50);
+                itemInventory.add(itemType);
+                break;
+        }
+    }
+
+    public ArrayList<Integer> GetItemInventory() {
+        return itemInventory;
+    }
+
+    public boolean UseItem(int itemType) {
+        if (!itemInventory.contains(itemType)) {
+            return false;
+        }
+        switch (itemType) {
+            default:
+                break;
+        }
+        return false;
+    }
+
+    public int GetScore() {
+        return score;
+    }
+
+    public void AddScore(int score) {
+        MoveChara.score += score;
+    }
+
+    public void ResetScore() {
+        MoveChara.score = 0;
+    }
+
     private class ImageAnimation extends AnimationTimer {
-
         private ImageView charaView = null;
         private Image[] charaImages = null;
         private int index = 0;
 
-        private long duration = 500 * 1000000L; // 500[ms]
+        private long duration = 500 * 1000000L;
         private long startTime = 0;
 
         private long count = 0L;
@@ -130,7 +164,7 @@ public class MoveChara {
                 }
                 if (index < 0 || 2 < index) {
                     index = 1;
-                    isPlus = !isPlus; // true == !false, false == !true
+                    isPlus = !isPlus;
                 }
                 charaView.setImage(charaImages[index]);
             }
