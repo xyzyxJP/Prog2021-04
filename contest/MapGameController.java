@@ -60,7 +60,7 @@ public class MapGameController implements Initializable {
                 moveChara.SetPositionY(1);
                 mapData.SetItemType(moveCharaPositionX, moveCharaPositionY, MapData.ITEM_TYPE_NULL);
                 break;
-            case default:
+            default:
                 if (itemType != MapData.ITEM_TYPE_NULL && itemType != MapData.ITEM_TYPE_GOAL) {
                     printAction("GET");
                     moveChara.AddItem(itemType);
