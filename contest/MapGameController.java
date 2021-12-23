@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.AudioClip;
 
 public class MapGameController implements Initializable {
     public MapData mapData;
@@ -21,11 +22,41 @@ public class MapGameController implements Initializable {
     public GridPane itemGridPane;
     public Label scoreLabel;
     public Label timeLabel;
-
+    public AudioClip mainAudioClip;
+    public AudioClip itemAudioClip;
+    public AudioClip coinAudioClip;
+    public AudioClip portalAudioClip;
+    public AudioClip clearAudioClip;
     public Timer timer;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (mainAudioClip == null) {
+            mainAudioClip = new AudioClip(getClass().getResource("audio/main.mp3").toExternalForm());
+            mainAudioClip.setCycleCount(AudioClip.INDEFINITE);
+            mainAudioClip.setVolume(0.02);
+            mainAudioClip.play();
+        }
+        if (itemAudioClip == null) {
+            itemAudioClip = new AudioClip(getClass().getResource("audio/item.mp3").toExternalForm());
+            itemAudioClip.setCycleCount(1);
+            itemAudioClip.setVolume(0.02);
+        }
+        if (coinAudioClip == null) {
+            coinAudioClip = new AudioClip(getClass().getResource("audio/coin.mp3").toExternalForm());
+            coinAudioClip.setCycleCount(1);
+            coinAudioClip.setVolume(0.02);
+        }
+        if (portalAudioClip == null) {
+            portalAudioClip = new AudioClip(getClass().getResource("audio/portal.mp3").toExternalForm());
+            portalAudioClip.setCycleCount(1);
+            portalAudioClip.setVolume(0.02);
+        }
+        if (clearAudioClip == null) {
+            clearAudioClip = new AudioClip(getClass().getResource("audio/clear.mp3").toExternalForm());
+            clearAudioClip.setCycleCount(1);
+            clearAudioClip.setVolume(0.05);
+        }
         mapData = new MapData(21, 15);
         moveChara = new MoveChara(1, 1, mapData);
         DrawMap(moveChara, mapData);
@@ -56,6 +87,7 @@ public class MapGameController implements Initializable {
         switch (itemType) {
             case MapData.ITEM_TYPE_PORTAL:
                 printAction("PORTAL");
+                portalAudioClip.play();
                 moveChara.SetPositionX(1);
                 moveChara.SetPositionY(1);
                 mapData.SetItemType(moveCharaPositionX, moveCharaPositionY, MapData.ITEM_TYPE_NULL);
@@ -63,6 +95,11 @@ public class MapGameController implements Initializable {
             default:
                 if (itemType != MapData.ITEM_TYPE_NULL && itemType != MapData.ITEM_TYPE_GOAL) {
                     printAction("GET");
+                    if (itemType == MapData.ITEM_TYPE_COIN) {
+                        coinAudioClip.play();
+                    } else {
+                        itemAudioClip.play();
+                    }
                     moveChara.AddItem(itemType);
                     mapData.SetItemType(moveCharaPositionX, moveCharaPositionY, MapData.ITEM_TYPE_NULL);
                 }
@@ -91,6 +128,7 @@ public class MapGameController implements Initializable {
         if (itemType == MapData.ITEM_TYPE_GOAL) {
             if (moveChara.GetItemInventory().contains(MapData.ITEM_TYPE_KEY)) {
                 printAction("CLEAR");
+                clearAudioClip.play();
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setHeaderText(null);
                 alert.setContentText("Clear!");
@@ -175,6 +213,8 @@ public class MapGameController implements Initializable {
         moveChara.ResetScore();
         mapData.ResetTimeLimit();
         RemapButtonAction();
+        mainAudioClip.stop();
+        mainAudioClip.play();
     }
 
     public void func1ButtonAction(ActionEvent event) {

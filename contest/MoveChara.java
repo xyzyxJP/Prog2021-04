@@ -104,6 +104,9 @@ public class MoveChara {
 
     public void AddItem(int itemType) {
         switch (itemType) {
+            case MapData.ITEM_TYPE_COIN:
+                AddScore(200);
+                break;
             default:
                 AddScore(50);
                 itemInventory.add(itemType);
