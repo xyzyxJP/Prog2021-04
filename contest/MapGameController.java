@@ -86,7 +86,7 @@ public class MapGameController implements Initializable {
         int itemType = mapData.GetItemType(moveCharaPositionX, moveCharaPositionY);
         switch (itemType) {
             case MapData.ITEM_TYPE_PORTAL:
-                printAction("PORTAL");
+                PrintAction("PORTAL");
                 portalAudioClip.play();
                 moveChara.SetPositionX(1);
                 moveChara.SetPositionY(1);
@@ -94,7 +94,7 @@ public class MapGameController implements Initializable {
                 break;
             default:
                 if (itemType != MapData.ITEM_TYPE_NULL && itemType != MapData.ITEM_TYPE_GOAL) {
-                    printAction("GET");
+                    PrintAction("GET");
                     if (itemType == MapData.ITEM_TYPE_COIN) {
                         coinAudioClip.play();
                     } else {
@@ -127,7 +127,7 @@ public class MapGameController implements Initializable {
 
         if (itemType == MapData.ITEM_TYPE_GOAL) {
             if (moveChara.GetItemInventory().contains(MapData.ITEM_TYPE_KEY)) {
-                printAction("CLEAR");
+                PrintAction("CLEAR");
                 clearAudioClip.play();
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setHeaderText(null);
@@ -172,40 +172,40 @@ public class MapGameController implements Initializable {
     }
 
     public void UpButtonAction() {
-        printAction("UP");
+        PrintAction("UP");
         moveChara.SetCharaDirection(MoveChara.TYPE_UP);
         moveChara.Move(MoveChara.TYPE_UP);
         DrawMap(moveChara, mapData);
     }
 
     public void DownButtonAction() {
-        printAction("DOWN");
+        PrintAction("DOWN");
         moveChara.SetCharaDirection(MoveChara.TYPE_DOWN);
         moveChara.Move(MoveChara.TYPE_DOWN);
         DrawMap(moveChara, mapData);
     }
 
     public void LeftButtonAction() {
-        printAction("LEFT");
+        PrintAction("LEFT");
         moveChara.SetCharaDirection(MoveChara.TYPE_LEFT);
         moveChara.Move(MoveChara.TYPE_LEFT);
         DrawMap(moveChara, mapData);
     }
 
     public void RightButtonAction() {
-        printAction("RIGHT");
+        PrintAction("RIGHT");
         moveChara.SetCharaDirection(MoveChara.TYPE_RIGHT);
         moveChara.Move(MoveChara.TYPE_RIGHT);
         DrawMap(moveChara, mapData);
     }
 
     public void RemapButtonAction() {
-        printAction("REMAP");
+        PrintAction("REMAP");
         initialize(null, null);
     }
 
     public void OverButtonAction() {
-        printAction("OVER");
+        PrintAction("OVER");
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setContentText("Game Over!\n" + "Score : " + String.valueOf(moveChara.GetScore()));
@@ -233,7 +233,7 @@ public class MapGameController implements Initializable {
         System.out.println("func4: Nothing to do");
     }
 
-    public void printAction(String actionString) {
+    public void PrintAction(String actionString) {
         System.out.println("Action: " + actionString);
     }
 }
