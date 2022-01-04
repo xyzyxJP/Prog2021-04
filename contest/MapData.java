@@ -36,6 +36,12 @@ public class MapData {
     private Date startDate;
     private long timeOffset;
 
+    /**
+     * MapDataを初期化する
+     * 
+     * @param x マップの幅
+     * @param y マップの高さ
+     */
     MapData(int x, int y) {
         width = x;
         height = y;
@@ -66,6 +72,12 @@ public class MapData {
         timeOffset = 0;
     }
 
+    /**
+     * アイテムをランダムに配置する
+     * 
+     * @param itemCount アイテムの数
+     * @param itemType  ItemType
+     */
     private void SetItemTypeRandom(int itemCount, int itemType) {
         for (int i = 0; i < itemCount; i++) {
             int tempX = (int) (Math.random() * width);
@@ -79,30 +91,67 @@ public class MapData {
         }
     }
 
+    /**
+     * マップの高さを返す
+     * 
+     * @return
+     */
     public int GetHeight() {
         return height;
     }
 
+    /**
+     * マップの幅を返す
+     * 
+     * @return
+     */
     public int GetWidth() {
         return width;
     }
 
+    /**
+     * 残り時間を返す
+     * 
+     * @return
+     */
     public long GetRemainingTime() {
         return MapData.TIME_LIMIT - (((new Date().getTime()) - startDate.getTime()) / 1000) + timeOffset;
     }
 
+    /**
+     * 残り時間を初期化する
+     */
     public void ResetTimeLimit() {
         TIME_LIMIT = RESET_TIME_LIMIT;
     }
 
+    /**
+     * 残り時間を追加する
+     * 
+     * @param offset
+     */
     public void AddTimeOffset(long offset) {
         timeOffset += offset;
     }
 
+    /**
+     * 座標がマップの範囲内であるか返す
+     * 
+     * @param x X座標
+     * @param y Y座標
+     * @return
+     */
     public boolean CheckXY(int x, int y) {
         return (x < 0 || width <= x || y < 0 || height <= y);
     }
 
+    /**
+     * 座標のMapTypeを返す
+     * 
+     * @param x X座標
+     * @param y Y座標
+     * @return
+     */
     public int GetMapType(int x, int y) {
         if (CheckXY(x, y)) {
             return -1;
@@ -110,6 +159,13 @@ public class MapData {
         return mapTypes[y][x];
     }
 
+    /**
+     * 座標のImageViewを返す
+     * 
+     * @param x X座標
+     * @param y Y座標
+     * @return
+     */
     public ImageView GetMapItemImageView(int x, int y) {
         if (CheckXY(x, y)) {
             return null;
@@ -121,6 +177,13 @@ public class MapData {
         }
     }
 
+    /**
+     * 座標のMapTypeを設定する
+     * 
+     * @param x       X座標
+     * @param y       Y座標
+     * @param mapType MapType
+     */
     public void SetMapType(int x, int y, int mapType) {
         if (CheckXY(x, y)) {
             return;
@@ -128,6 +191,13 @@ public class MapData {
         mapTypes[y][x] = mapType;
     }
 
+    /**
+     * 座標のItemTypeを返す
+     * 
+     * @param x X座標
+     * @param y Y座標
+     * @return
+     */
     public int GetItemType(int x, int y) {
         if (CheckXY(x, y)) {
             return -1;
@@ -135,6 +205,13 @@ public class MapData {
         return itemTypes[y][x];
     }
 
+    /**
+     * 座標のItemTypeを設定する
+     * 
+     * @param x        X座標
+     * @param y        Y座標
+     * @param itemType ItemType
+     */
     public void SetItemType(int x, int y, int itemType) {
         if (CheckXY(x, y)) {
             return;
@@ -142,10 +219,21 @@ public class MapData {
         itemTypes[y][x] = itemType;
     }
 
+    /**
+     * ItemTypeのImageViewを返す
+     * 
+     * @param itemType ItemType
+     * @return
+     */
     public ImageView GetItemImageView(int itemType) {
         return new ImageView(itemImages[itemType]);
     }
 
+    /**
+     * MapTypeで全マス埋める
+     * 
+     * @param mapType MapType
+     */
     public void FillMapType(int mapType) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -154,6 +242,11 @@ public class MapData {
         }
     }
 
+    /**
+     * ItemTypeで全マス埋める
+     * 
+     * @param itemType ItemType
+     */
     public void FillItemType(int itemType) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -162,6 +255,12 @@ public class MapData {
         }
     }
 
+    /**
+     * マップ生成の処理をする
+     * 
+     * @param x X座標
+     * @param y Y座標
+     */
     public void DigMap(int x, int y) {
         SetMapType(x, y, MAP_TYPE_SPACE);
         int[] temp;

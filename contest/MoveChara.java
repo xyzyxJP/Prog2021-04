@@ -31,6 +31,13 @@ public class MoveChara {
 
     private int charaDirection;
 
+    /**
+     * MoveCharaを初期化する
+     * 
+     * @param startX  初期X座標
+     * @param startY  初期Y座標
+     * @param mapData MapData
+     */
     MoveChara(int startX, int startY, MapData mapData) {
         this.mapData = mapData;
 
@@ -53,6 +60,11 @@ public class MoveChara {
         SetCharaDirection(TYPE_RIGHT);
     }
 
+    /**
+     * キャラクターの向きを変更する
+     * 
+     * @param charaDirection CharaDirection
+     */
     public void SetCharaDirection(int charaDirection) {
         this.charaDirection = charaDirection;
         for (int i = 0; i < 4; i++) {
@@ -64,6 +76,12 @@ public class MoveChara {
         }
     }
 
+    /**
+     * 指定方向に移動できるかを返す
+     * 
+     * @param charaDirection CharaDirection
+     * @return
+     */
     public boolean CanMove(int charaDirection) {
         if (mapData.GetMapType(positionX + VECTORS[charaDirection][1],
                 positionY + VECTORS[charaDirection][0]) == MapData.MAP_TYPE_SPACE) {
@@ -72,6 +90,12 @@ public class MoveChara {
         return false;
     }
 
+    /**
+     * 指定方向に移動する
+     * 
+     * @param charaDirection CharaDirection
+     * @return
+     */
     public boolean Move(int charaDirection) {
         if (CanMove(charaDirection)) {
             positionX += VECTORS[charaDirection][1];
@@ -82,26 +106,56 @@ public class MoveChara {
         }
     }
 
+    /**
+     * キャラクターのImageViewを返す
+     * 
+     * @return
+     */
     public ImageView GetCharaImageView() {
         return charaImageViews[charaDirection];
     }
 
+    /**
+     * キャラクターのX座標を返す
+     * 
+     * @return
+     */
     public int GetPositionX() {
         return positionX;
     }
 
+    /**
+     * キャラクターのY座標を返す
+     * 
+     * @return
+     */
     public int GetPositionY() {
         return positionY;
     }
 
+    /**
+     * キャラクターのX座標を設定する
+     * 
+     * @param positionX
+     */
     public void SetPositionX(int positionX) {
         this.positionX = positionX;
     }
 
+    /**
+     * キャラクターのY座標を設定する
+     * 
+     * @param positionY
+     */
     public void SetPositionY(int positionY) {
         this.positionY = positionY;
     }
 
+    /**
+     * キャラクターのイベントリにアイテムを追加する
+     * 
+     * @param itemType ItemType
+     */
     public void AddItem(int itemType) {
         switch (itemType) {
             case MapData.ITEM_TYPE_COIN:
@@ -114,10 +168,21 @@ public class MoveChara {
         }
     }
 
+    /**
+     * キャラクターのイベントリ一覧を返す
+     * 
+     * @return
+     */
     public ArrayList<Integer> GetItemInventory() {
         return itemInventory;
     }
 
+    /**
+     * キャラクターのアイテムを使用する
+     * 
+     * @param itemType ItemType
+     * @return
+     */
     public boolean UseItem(int itemType) {
         if (!itemInventory.contains(itemType)) {
             return false;
@@ -129,18 +194,34 @@ public class MoveChara {
         return false;
     }
 
+    /**
+     * キャラクターのスコアを返す
+     * 
+     * @return
+     */
     public int GetScore() {
         return score;
     }
 
+    /**
+     * キャラクターのスコアを追加する
+     * 
+     * @param score Score
+     */
     public void AddScore(int score) {
         MoveChara.score += score;
     }
 
+    /**
+     * キャラクターのスコアを初期化する
+     */
     public void ResetScore() {
         MoveChara.score = 0;
     }
 
+    /**
+     * キャラクターのアニメーション処理をする
+     */
     private class ImageAnimation extends AnimationTimer {
         private ImageView charaView = null;
         private Image[] charaImages = null;

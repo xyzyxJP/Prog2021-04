@@ -80,6 +80,12 @@ public class MapGameController implements Initializable {
         }, 0, 500);
     }
 
+    /**
+     * マップを描画する
+     * 
+     * @param moveChara MoveChara
+     * @param mapData   MapData
+     */
     public void DrawMap(MoveChara moveChara, MapData mapData) {
         int moveCharaPositionX = moveChara.GetPositionX();
         int moveCharaPositionY = moveChara.GetPositionY();
@@ -139,6 +145,11 @@ public class MapGameController implements Initializable {
         }
     }
 
+    /**
+     * キー入力時の処理をする
+     * 
+     * @param keyEvent KeyEvent
+     */
     public void KeyAction(KeyEvent keyEvent) {
         KeyCode keyCode = keyEvent.getCode();
         System.out.println("KeyCode:" + keyCode);
@@ -171,6 +182,9 @@ public class MapGameController implements Initializable {
         }
     }
 
+    /**
+     * 上へ移動する
+     */
     public void UpButtonAction() {
         PrintAction("UP");
         moveChara.SetCharaDirection(MoveChara.TYPE_UP);
@@ -178,6 +192,9 @@ public class MapGameController implements Initializable {
         DrawMap(moveChara, mapData);
     }
 
+    /**
+     * 下へ移動する
+     */
     public void DownButtonAction() {
         PrintAction("DOWN");
         moveChara.SetCharaDirection(MoveChara.TYPE_DOWN);
@@ -185,6 +202,9 @@ public class MapGameController implements Initializable {
         DrawMap(moveChara, mapData);
     }
 
+    /**
+     * 左へ移動する
+     */
     public void LeftButtonAction() {
         PrintAction("LEFT");
         moveChara.SetCharaDirection(MoveChara.TYPE_LEFT);
@@ -192,6 +212,9 @@ public class MapGameController implements Initializable {
         DrawMap(moveChara, mapData);
     }
 
+    /**
+     * 右へ移動する
+     */
     public void RightButtonAction() {
         PrintAction("RIGHT");
         moveChara.SetCharaDirection(MoveChara.TYPE_RIGHT);
@@ -199,11 +222,17 @@ public class MapGameController implements Initializable {
         DrawMap(moveChara, mapData);
     }
 
+    /**
+     * マップを初期化する
+     */
     public void RemapButtonAction() {
         PrintAction("REMAP");
         initialize(null, null);
     }
 
+    /**
+     * ゲームオーバーの処理をする
+     */
     public void OverButtonAction() {
         PrintAction("OVER");
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -217,22 +246,47 @@ public class MapGameController implements Initializable {
         mainAudioClip.play();
     }
 
+    /**
+     * ボタン1を押した処理をする
+     * 
+     * @param event Event
+     */
     public void func1ButtonAction(ActionEvent event) {
         System.out.println("func1: Nothing to do");
     }
 
+    /**
+     * ボタン2を押した処理をする
+     * 
+     * @param event Event
+     */
     public void func2ButtonAction(ActionEvent event) {
         System.out.println("func2: Nothing to do");
     }
 
+    /**
+     * ボタン3を押した処理をする
+     * 
+     * @param event Event
+     */
     public void func3ButtonAction(ActionEvent event) {
         System.out.println("func3: Nothing to do");
     }
 
+    /**
+     * ボタン4を押した処理をする
+     * 
+     * @param event Event
+     */
     public void func4ButtonAction(ActionEvent event) {
         System.out.println("func4: Nothing to do");
     }
 
+    /**
+     * アクションログを表示する
+     * 
+     * @param actionString アクション名
+     */
     public void PrintAction(String actionString) {
         System.out.println("Action: " + actionString);
     }
