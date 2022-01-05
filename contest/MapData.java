@@ -104,7 +104,7 @@ public class MapData {
     /**
      * マップの高さを返す
      * 
-     * @return
+     * @return マップの高さ
      */
     public int GetHeight() {
         return height;
@@ -113,7 +113,7 @@ public class MapData {
     /**
      * マップの幅を返す
      * 
-     * @return
+     * @return マップの幅
      */
     public int GetWidth() {
         return width;
@@ -122,7 +122,7 @@ public class MapData {
     /**
      * 残り時間を返す
      * 
-     * @return
+     * @return 残り時間
      */
     public long GetRemainingTime() {
         return MapData.TIME_LIMIT - (((new Date().getTime()) - startDate.getTime()) / 1000) + timeOffset;
@@ -138,7 +138,7 @@ public class MapData {
     /**
      * 残り時間を追加する
      * 
-     * @param offset
+     * @param offset 追加する秒数
      */
     public void AddTimeOffset(long offset) {
         timeOffset += offset;
@@ -149,7 +149,7 @@ public class MapData {
      * 
      * @param x X座標
      * @param y Y座標
-     * @return
+     * @return マップの範囲内であるか
      */
     public boolean CheckXY(int x, int y) {
         return (x < 0 || width <= x || y < 0 || height <= y);
@@ -160,7 +160,7 @@ public class MapData {
      * 
      * @param x X座標
      * @param y Y座標
-     * @return
+     * @return MapType
      */
     public int GetMapType(int x, int y) {
         if (CheckXY(x, y)) {
@@ -174,7 +174,7 @@ public class MapData {
      * 
      * @param x X座標
      * @param y Y座標
-     * @return
+     * @return ImageView
      */
     public ImageView GetMapItemImageView(int x, int y) {
         if (CheckXY(x, y)) {
@@ -206,7 +206,7 @@ public class MapData {
      * 
      * @param x X座標
      * @param y Y座標
-     * @return
+     * @return ItemType
      */
     public int GetItemType(int x, int y) {
         if (CheckXY(x, y)) {
@@ -233,7 +233,7 @@ public class MapData {
      * ItemTypeのImageViewを返す
      * 
      * @param itemType ItemType
-     * @return
+     * @return ImageView
      */
     public ImageView GetItemImageView(int itemType) {
         return new ImageView(itemImages[itemType]);

@@ -287,24 +287,6 @@ public class MapGameController implements Initializable {
     }
 
     /**
-     * ボタン1を押した処理をする
-     * 
-     * @param event Event
-     */
-    public void func1ButtonAction(ActionEvent event) {
-        System.out.println("func1: Nothing to do");
-    }
-
-    /**
-     * ボタン2を押した処理をする
-     * 
-     * @param event Event
-     */
-    public void func2ButtonAction(ActionEvent event) {
-        System.out.println("func2: Nothing to do");
-    }
-
-    /**
      * ボタン3を押した処理をする
      * 
      * @param event Event
