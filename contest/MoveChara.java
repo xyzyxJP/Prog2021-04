@@ -79,12 +79,17 @@ public class MoveChara {
     /**
      * 指定方向に移動できるかを返す
      * 
-     * @param charaDirection CharaDirection
+     * @param charaDirection キャラクターの方向
+     * @param distance       キャラクターからの距離
      * @return
      */
-    public boolean CanMove(int charaDirection) {
-        if (mapData.GetMapType(positionX + VECTORS[charaDirection][1],
-                positionY + VECTORS[charaDirection][0]) == MapData.MAP_TYPE_SPACE) {
+    public boolean CanMove(int charaDirection, int distance) {
+        if (mapData.CheckXY(positionX + VECTORS[charaDirection][1] * distance,
+                positionY + VECTORS[charaDirection][0] * distance)) {
+            return false;
+        }
+        if (mapData.GetMapType(positionX + VECTORS[charaDirection][1] * distance,
+                positionY + VECTORS[charaDirection][0] * distance) == MapData.MAP_TYPE_SPACE) {
             return true;
         }
         return false;
@@ -93,13 +98,14 @@ public class MoveChara {
     /**
      * 指定方向に移動する
      * 
-     * @param charaDirection CharaDirection
+     * @param charaDirection キャラクターの方向
+     * @param distance       キャラクターからの距離
      * @return
      */
-    public boolean Move(int charaDirection) {
-        if (CanMove(charaDirection)) {
-            positionX += VECTORS[charaDirection][1];
-            positionY += VECTORS[charaDirection][0];
+    public boolean Move(int charaDirection, int distance) {
+        if (CanMove(charaDirection, distance)) {
+            positionX += VECTORS[charaDirection][1] * distance;
+            positionY += VECTORS[charaDirection][0] * distance;
             return true;
         } else {
             return false;
@@ -161,6 +167,10 @@ public class MoveChara {
             case MapData.ITEM_TYPE_COIN:
                 AddScore(200);
                 break;
+            case MapData.ITEM_TYPE_TIME:
+                AddScore(50);
+                mapData.AddTimeOffset(MapData.TIME_PLUS);
+                break;
             default:
                 AddScore(50);
                 itemInventory.add(itemType);
@@ -188,7 +198,22 @@ public class MoveChara {
             return false;
         }
         switch (itemType) {
-            default:
+            case MapData.ITEM_TYPE_BOMB:
+                if (!CanMove(charaDirection, 1)) {
+                    itemInventory.remove(itemInventory.indexOf(itemType));
+                    mapData.SetMapType(positionX + VECTORS[charaDirection][1],
+                            positionY + VECTORS[charaDirection][0], MapData.MAP_TYPE_SPACE);
+                    AddScore(100);
+                    return true;
+                }
+                break;
+            case MapData.ITEM_TYPE_HACK:
+                if (!CanMove(charaDirection, 1) && CanMove(charaDirection, 2)) {
+                    itemInventory.remove(itemInventory.indexOf(itemType));
+                    Move(charaDirection, 2);
+                    AddScore(100);
+                    return true;
+                }
                 break;
         }
         return false;

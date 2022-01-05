@@ -26,6 +26,8 @@ public class MapGameController implements Initializable {
     public AudioClip itemAudioClip;
     public AudioClip coinAudioClip;
     public AudioClip portalAudioClip;
+    public AudioClip bombAudioClip;
+    public AudioClip hackAudioClip;
     public AudioClip clearAudioClip;
     public Timer timer;
 
@@ -51,6 +53,16 @@ public class MapGameController implements Initializable {
             portalAudioClip = new AudioClip(getClass().getResource("audio/portal.mp3").toExternalForm());
             portalAudioClip.setCycleCount(1);
             portalAudioClip.setVolume(0.02);
+        }
+        if (bombAudioClip == null) {
+            bombAudioClip = new AudioClip(getClass().getResource("audio/bomb.mp3").toExternalForm());
+            bombAudioClip.setCycleCount(1);
+            bombAudioClip.setVolume(0.05);
+        }
+        if (hackAudioClip == null) {
+            hackAudioClip = new AudioClip(getClass().getResource("audio/hack.mp3").toExternalForm());
+            hackAudioClip.setCycleCount(1);
+            hackAudioClip.setVolume(0.05);
         }
         if (clearAudioClip == null) {
             clearAudioClip = new AudioClip(getClass().getResource("audio/clear.mp3").toExternalForm());
@@ -154,21 +166,23 @@ public class MapGameController implements Initializable {
         KeyCode keyCode = keyEvent.getCode();
         System.out.println("KeyCode:" + keyCode);
         switch (keyCode) {
-            case H:
             case A:
                 LeftButtonAction();
                 break;
-            case J:
             case S:
                 DownButtonAction();
                 break;
-            case K:
             case W:
                 UpButtonAction();
                 break;
-            case L:
             case D:
                 RightButtonAction();
+                break;
+            case B:
+                BombButtonAction(null);
+                break;
+            case H:
+                HackButtonAction(null);
                 break;
             case R:
             case DELETE:
@@ -188,7 +202,7 @@ public class MapGameController implements Initializable {
     public void UpButtonAction() {
         PrintAction("UP");
         moveChara.SetCharaDirection(MoveChara.TYPE_UP);
-        moveChara.Move(MoveChara.TYPE_UP);
+        moveChara.Move(MoveChara.TYPE_UP, 1);
         DrawMap(moveChara, mapData);
     }
 
@@ -198,7 +212,7 @@ public class MapGameController implements Initializable {
     public void DownButtonAction() {
         PrintAction("DOWN");
         moveChara.SetCharaDirection(MoveChara.TYPE_DOWN);
-        moveChara.Move(MoveChara.TYPE_DOWN);
+        moveChara.Move(MoveChara.TYPE_DOWN, 1);
         DrawMap(moveChara, mapData);
     }
 
@@ -208,7 +222,7 @@ public class MapGameController implements Initializable {
     public void LeftButtonAction() {
         PrintAction("LEFT");
         moveChara.SetCharaDirection(MoveChara.TYPE_LEFT);
-        moveChara.Move(MoveChara.TYPE_LEFT);
+        moveChara.Move(MoveChara.TYPE_LEFT, 1);
         DrawMap(moveChara, mapData);
     }
 
@@ -218,7 +232,7 @@ public class MapGameController implements Initializable {
     public void RightButtonAction() {
         PrintAction("RIGHT");
         moveChara.SetCharaDirection(MoveChara.TYPE_RIGHT);
-        moveChara.Move(MoveChara.TYPE_RIGHT);
+        moveChara.Move(MoveChara.TYPE_RIGHT, 1);
         DrawMap(moveChara, mapData);
     }
 
@@ -228,6 +242,32 @@ public class MapGameController implements Initializable {
     public void RemapButtonAction() {
         PrintAction("REMAP");
         initialize(null, null);
+    }
+
+    /**
+     * 爆弾を使用する
+     * 
+     * @param actionEvent ActionEvent
+     */
+    public void BombButtonAction(ActionEvent actionEvent) {
+        PrintAction("BOMB");
+        if (moveChara.UseItem(MapData.ITEM_TYPE_BOMB)) {
+            bombAudioClip.play();
+        }
+        DrawMap(moveChara, mapData);
+    }
+
+    /**
+     * 一方通行を使用する
+     * 
+     * @param actionEvent ActionEvent
+     */
+    public void HackButtonAction(ActionEvent actionEvent) {
+        PrintAction("HACK");
+        if (moveChara.UseItem(MapData.ITEM_TYPE_HACK)) {
+            hackAudioClip.play();
+        }
+        DrawMap(moveChara, mapData);
     }
 
     /**

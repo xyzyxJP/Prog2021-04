@@ -1,6 +1,7 @@
+import java.util.Date;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import java.util.Date;
 
 public class MapData {
     public static final int MAP_TYPE_SPACE = 0;
@@ -12,14 +13,20 @@ public class MapData {
 
     public static final int ITEM_TYPE_NULL = -1;
     public static final int ITEM_TYPE_GOAL = 0;
-    public static final int ITEM_TYPE_KEY = 1;
-    public static final int ITEM_TYPE_PORTAL = 2;
+    public static final int ITEM_TYPE_BOMB = 1;
+    public static final int ITEM_TYPE_KEY = 2;
     public static final int ITEM_TYPE_COIN = 3;
+    public static final int ITEM_TYPE_PORTAL = 4;
+    public static final int ITEM_TYPE_TIME = 5;
+    public static final int ITEM_TYPE_HACK = 6;
     private static final String itemImagePaths[] = {
             "image/goal.png",
+            "image/bomb.png",
             "image/key.png",
+            "image/coin.png",
             "image/portal.png",
-            "image/coin.png"
+            "image/time.png",
+            "image/hack.png"
     };
 
     public static final long RESET_TIME_LIMIT = 35;
@@ -63,9 +70,12 @@ public class MapData {
 
         FillItemType(ITEM_TYPE_NULL);
         SetItemType(x - 2, y - 2, ITEM_TYPE_GOAL);
+        SetItemTypeRandom(3, ITEM_TYPE_BOMB);
         SetItemTypeRandom(1, ITEM_TYPE_KEY);
-        SetItemTypeRandom(1, ITEM_TYPE_PORTAL);
         SetItemTypeRandom(3, ITEM_TYPE_COIN);
+        SetItemTypeRandom(1, ITEM_TYPE_PORTAL);
+        SetItemTypeRandom(3, ITEM_TYPE_TIME);
+        SetItemTypeRandom(2, ITEM_TYPE_HACK);
 
         TIME_LIMIT -= 5;
         startDate = new Date();
