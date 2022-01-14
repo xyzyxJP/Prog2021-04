@@ -152,6 +152,7 @@ public class MapGameController implements Initializable {
                 alert.setContentText("Clear!");
                 alert.showAndWait();
                 moveChara.AddScore(1000);
+                // moveChara.AddScore(1000 + 10 * (int) mapData.GetRemainingTime());
                 RemapButtonAction();
             }
         }
