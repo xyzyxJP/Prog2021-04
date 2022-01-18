@@ -84,7 +84,7 @@ public class MapGameController implements Initializable {
                     timeLabel.setText(String.valueOf(remainingTime));
                     if (remainingTime <= 0) {
                         timer.cancel();
-                        OverButtonAction();
+                        OverButtonAction(null);
                         return;
                     }
                 });
@@ -274,7 +274,7 @@ public class MapGameController implements Initializable {
     /**
      * ゲームオーバーの処理をする
      */
-    public void OverButtonAction() {
+    public void OverButtonAction(ActionEvent actionEvent) {
         PrintAction("OVER");
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText(null);
@@ -288,21 +288,20 @@ public class MapGameController implements Initializable {
     }
 
     /**
-     * ボタン3を押した処理をする
-     * 
-     * @param event Event
+     * ランキングを表示する
      */
-    public void func3ButtonAction(ActionEvent event) {
-        System.out.println("func3: Nothing to do");
-    }
-
-    /**
-     * ボタン4を押した処理をする
-     * 
-     * @param event Event
-     */
-    public void func4ButtonAction(ActionEvent event) {
-        System.out.println("func4: Nothing to do");
+    public void RankButtonAction(ActionEvent actionEvent) {
+        PrintAction("RANK");
+        // Alert alert = new Alert(AlertType.INFORMATION);
+        // alert.setHeaderText(null);
+        // alert.setContentText("Game Over!\n" + "Score : " +
+        // String.valueOf(moveChara.GetScore()));
+        // alert.showAndWait();
+        // moveChara.ResetScore();
+        // mapData.ResetTimeLimit();
+        // RemapButtonAction();
+        // mainAudioClip.stop();
+        // mainAudioClip.play();
     }
 
     /**

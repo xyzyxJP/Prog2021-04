@@ -15,8 +15,8 @@
       <children>
         <Button text="Bomb" prefWidth="100" onAction="#BombButtonAction"/>
         <Button text="Hack" prefWidth="100" onAction="#HackButtonAction"/>
-        <Button text="func3" prefWidth="100" onAction="#func3ButtonAction"/>
-        <Button text="func4" prefWidth="100" onAction="#func4ButtonAction"/>
+        <Button text="Over" prefWidth="100" onAction="#OverButtonAction"/>
+        <Button text="Rank" prefWidth="100" onAction="#RankButtonAction"/>
         <GridPane fx:id="itemGridPane" prefWidth="200" />
       </children>
     </HBox>
