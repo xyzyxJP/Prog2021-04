@@ -48,3 +48,5 @@ hs_err_pid*
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,java
 
 desktop.ini
+
+!contest/lib/json-20211205.jar
