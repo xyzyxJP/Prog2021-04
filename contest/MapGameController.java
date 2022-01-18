@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.media.AudioClip;
 
 public class MapGameController implements Initializable {
+    public RankData rankData;
     public MapData mapData;
     public MoveChara moveChara;
     public GridPane mapGridPane;
@@ -68,6 +69,9 @@ public class MapGameController implements Initializable {
             clearAudioClip = new AudioClip(getClass().getResource("audio/clear.mp3").toExternalForm());
             clearAudioClip.setCycleCount(1);
             clearAudioClip.setVolume(0.05);
+        }
+        if (rankData == null) {
+            rankData = new RankData();
         }
         mapData = new MapData(21, 15);
         moveChara = new MoveChara(1, 1, mapData);
@@ -152,7 +156,7 @@ public class MapGameController implements Initializable {
                 alert.setContentText("Clear!");
                 alert.showAndWait();
                 moveChara.AddScore(1000);
-                // moveChara.AddScore(1000 + 10 * (int) mapData.GetRemainingTime());
+                moveChara.AddScore(1000 + 10 * (int) mapData.GetRemainingTime());
                 RemapButtonAction();
             }
         }
@@ -188,7 +192,7 @@ public class MapGameController implements Initializable {
             case R:
             case DELETE:
             case BACK_SPACE:
-                RemapButtonAction();
+                OverButtonAction(null);
                 break;
             case ESCAPE:
                 System.exit(0);
@@ -276,9 +280,10 @@ public class MapGameController implements Initializable {
      */
     public void OverButtonAction(ActionEvent actionEvent) {
         PrintAction("OVER");
+        Rank rank = rankData.SubmitScore("", moveChara.GetScore());
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText(null);
-        alert.setContentText("Game Over!\n" + "Score : " + String.valueOf(moveChara.GetScore()));
+        alert.setContentText("Game Over!\n" + "Score : " + rank.score + "\n" + "Rank : " + rank.rank);
         alert.showAndWait();
         moveChara.ResetScore();
         mapData.ResetTimeLimit();
@@ -292,16 +297,21 @@ public class MapGameController implements Initializable {
      */
     public void RankButtonAction(ActionEvent actionEvent) {
         PrintAction("RANK");
-        // Alert alert = new Alert(AlertType.INFORMATION);
-        // alert.setHeaderText(null);
-        // alert.setContentText("Game Over!\n" + "Score : " +
-        // String.valueOf(moveChara.GetScore()));
-        // alert.showAndWait();
-        // moveChara.ResetScore();
-        // mapData.ResetTimeLimit();
-        // RemapButtonAction();
-        // mainAudioClip.stop();
-        // mainAudioClip.play();
+        String rankText = "";
+        ArrayList<Rank> rankList = rankData.GetRankList();
+        for (int i = 0; i < Math.min(rankList.size(), 10); i++) {
+            rankText += String.valueOf(i + 1) + "   " + rankList.get(i).name + "   "
+                    + String.valueOf(rankList.get(i).score) + "\n";
+        }
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText("Ranking\n" + rankText);
+        alert.showAndWait();
+        moveChara.ResetScore();
+        mapData.ResetTimeLimit();
+        RemapButtonAction();
+        mainAudioClip.stop();
+        mainAudioClip.play();
     }
 
     /**
