@@ -300,8 +300,7 @@ public class MapGameController implements Initializable {
         String rankText = "";
         ArrayList<Rank> rankList = rankData.GetRankList();
         for (int i = 0; i < Math.min(rankList.size(), 10); i++) {
-            rankText += String.valueOf(i + 1) + "   " + rankList.get(i).name + "   "
-                    + String.valueOf(rankList.get(i).score) + "\n";
+            rankText += String.valueOf(i + 1) + " | " + rankList.get(i) + "\n";
         }
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText(null);

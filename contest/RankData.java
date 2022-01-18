@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RankData {
@@ -23,14 +22,11 @@ public class RankData {
 
     RankData() {
         try {
-            JSONObject jsonObject = new JSONObject(Files.readAllLines(Paths.get(rankDataFileName)));
-            System.out.println(Files.readAllLines(Paths.get(rankDataFileName)));
+            JSONObject jsonObject = new JSONObject(String.join("", Files.readAllLines(Paths.get(rankDataFileName))));
             JSONArray jsonArray = jsonObject.getJSONArray("rank");
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
-                    rankList.add(new Rank((JSONObject) jsonArray.get(i)));
-                } catch (JSONException exception) {
-                    System.err.println(exception.getMessage());
+                    rankList.add(new Rank(jsonArray.getJSONObject(i)));
                 } catch (ParseException exception) {
                     System.err.println(exception.getMessage());
                 }

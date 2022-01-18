@@ -36,4 +36,9 @@ public class Rank {
         }
         date = new Date();
     }
+
+    @Override
+    public String toString() {
+        return name + " " + score + " (" + rank + ") " + RankData.DATE_FORMAT.format(date);
+    }
 }
