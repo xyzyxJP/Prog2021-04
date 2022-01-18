@@ -4,7 +4,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,10 +24,11 @@ public class RankData {
     RankData() {
         try {
             JSONObject jsonObject = new JSONObject(Files.readAllLines(Paths.get(rankDataFileName)));
-            JSONArray jsonArray = new JSONArray(jsonObject.getJSONArray("rank"));
+            System.out.println(Files.readAllLines(Paths.get(rankDataFileName)));
+            JSONArray jsonArray = jsonObject.getJSONArray("rank");
             for (int i = 0; i < jsonArray.length(); i++) {
                 try {
-                    rankList.add(new Rank(new JSONObject(jsonArray.getString(i))));
+                    rankList.add(new Rank((JSONObject) jsonArray.get(i)));
                 } catch (JSONException exception) {
                     System.err.println(exception.getMessage());
                 } catch (ParseException exception) {
