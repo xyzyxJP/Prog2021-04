@@ -20,8 +20,12 @@ public class RankData {
     private static File file = new File(rankDataFileName);
     private static ArrayList<Rank> rankList = new ArrayList<Rank>();
 
+    /**
+     * ランクデータを生成する
+     */
     RankData() {
         try {
+            // JSONファイルからランクデータを読み込む
             JSONObject jsonObject = new JSONObject(String.join("", Files.readAllLines(Paths.get(rankDataFileName))));
             JSONArray jsonArray = jsonObject.getJSONArray("rank");
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -35,9 +39,17 @@ public class RankData {
         }
     }
 
-    public Rank SubmitScore(String name, int score) {
-        Rank rank = new Rank(name, score);
+    /**
+     * ランクデータにスコアを追加する
+     * 
+     * @param score
+     * @return
+     */
+    public Rank SubmitScore(int score) {
+        // ランクを生成する
+        Rank rank = new Rank(score);
         rankList.add(rank);
+        // JSONファイルに書き込む
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath()),
                     "UTF-8");
@@ -60,13 +72,21 @@ public class RankData {
         return rank;
     }
 
+    /**
+     * 並び替えたランクデータを返す
+     * 
+     * @return
+     */
     public ArrayList<Rank> GetRankList() {
+        // スコア, 日付の順番で並び替える
         Collections.sort(rankList, new RankComparator());
         return rankList;
     }
 
+    /**
+     * ランクデータを並び替える
+     */
     class RankComparator implements Comparator<Rank> {
-
         public int compare(Rank rank1, Rank rank2) {
             int score1 = rank1.score;
             int score2 = rank2.score;

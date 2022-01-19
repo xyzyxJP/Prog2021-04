@@ -11,16 +11,30 @@ public class Rank {
     public String rank;
     public Date date;
 
+    /**
+     * ランクを生成する (JSONObject)
+     * 
+     * @param jsonObject JSONObject
+     * @throws JSONException
+     * @throws ParseException
+     */
     Rank(JSONObject jsonObject) throws JSONException, ParseException {
+        // JSONオブジェクトからランクデータを読み込む
         name = jsonObject.getString("name");
         score = jsonObject.getInt("score");
         rank = jsonObject.getString("rank");
         date = RankData.DATE_FORMAT.parse(jsonObject.getString("date"));
     }
 
-    Rank(String name, int score) {
-        this.name = name;
+    /**
+     * ランクを生成する (int)
+     * 
+     * @param score スコア
+     */
+    Rank(int score) {
+        this.name = System.getenv("USERNAME");
         this.score = score;
+        // スコアによってランク分けをする
         if (score >= 15000) {
             rank = "S";
         } else if (score >= 12000) {
@@ -37,8 +51,11 @@ public class Rank {
         date = new Date();
     }
 
+    /**
+     * 名前 + スコア + (ランク) + 日付を返す
+     */
     @Override
     public String toString() {
-        return name + " " + score + " (" + rank + ") " + RankData.DATE_FORMAT.format(date);
+        return name + "   " + score + " (" + rank + ") " + RankData.DATE_FORMAT.format(date);
     }
 }

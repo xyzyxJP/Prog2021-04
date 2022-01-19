@@ -34,6 +34,7 @@ public class MapGameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // 音声ファイルを読み込む
         if (mainAudioClip == null) {
             mainAudioClip = new AudioClip(getClass().getResource("audio/main.mp3").toExternalForm());
             mainAudioClip.setCycleCount(AudioClip.INDEFINITE);
@@ -70,16 +71,22 @@ public class MapGameController implements Initializable {
             clearAudioClip.setCycleCount(1);
             clearAudioClip.setVolume(0.05);
         }
+        // ランクを読み込む
         if (rankData == null) {
             rankData = new RankData();
         }
+        // マップを生成する
         mapData = new MapData(21, 15);
+        // キャラクターを生成する
         moveChara = new MoveChara(1, 1, mapData);
+        // マップを描画する
         DrawMap(moveChara, mapData);
+        // 制限時間表示タイマーを初期化する
         if (timer != null) {
             timer.cancel();
         }
         timer = new Timer();
+        // 0.5秒おきに残り時間を取得し表示する
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -103,18 +110,23 @@ public class MapGameController implements Initializable {
      * @param mapData   MapData
      */
     public void DrawMap(MoveChara moveChara, MapData mapData) {
+        // キャラクターのX, Y座標を取得する
         int moveCharaPositionX = moveChara.GetPositionX();
         int moveCharaPositionY = moveChara.GetPositionY();
+        // キャラクターがいる場所のitemTypeを取得する
         int itemType = mapData.GetItemType(moveCharaPositionX, moveCharaPositionY);
         switch (itemType) {
             case MapData.ITEM_TYPE_PORTAL:
+                // ポータルである場合は1, 1にキャラクターを移動させる
                 PrintAction("PORTAL");
                 portalAudioClip.play();
                 moveChara.SetPositionX(1);
                 moveChara.SetPositionY(1);
+                // キャラクターがいる場所のitemTypeを空にする
                 mapData.SetItemType(moveCharaPositionX, moveCharaPositionY, MapData.ITEM_TYPE_NULL);
                 break;
             default:
+                // 空ではないかつゴールではない場合はアイテムインベントリに追加する
                 if (itemType != MapData.ITEM_TYPE_NULL && itemType != MapData.ITEM_TYPE_GOAL) {
                     PrintAction("GET");
                     if (itemType == MapData.ITEM_TYPE_COIN) {
@@ -123,13 +135,15 @@ public class MapGameController implements Initializable {
                         itemAudioClip.play();
                     }
                     moveChara.AddItem(itemType);
+                    // キャラクターがいる場所のitemTypeを空にする
                     mapData.SetItemType(moveCharaPositionX, moveCharaPositionY, MapData.ITEM_TYPE_NULL);
                 }
                 break;
         }
-
+        // キャラクターのX, Y座標を更新する
         moveCharaPositionX = moveChara.GetPositionX();
         moveCharaPositionY = moveChara.GetPositionY();
+        // マップの画像を描画する
         mapGridPane.getChildren().clear();
         for (int y = 0; y < mapData.GetHeight(); y++) {
             for (int x = 0; x < mapData.GetWidth(); x++) {
@@ -140,13 +154,15 @@ public class MapGameController implements Initializable {
                 }
             }
         }
+        // アイテムインベントリの画像を描画する
         itemGridPane.getChildren().clear();
         ArrayList<Integer> itemInventory = moveChara.GetItemInventory();
         for (int i = 0; i < itemInventory.size(); i++) {
             itemGridPane.add(mapData.GetItemImageView(itemInventory.get(i)), i, 0);
         }
+        // スコアを表示する
         scoreLabel.setText(String.valueOf(moveChara.GetScore()));
-
+        // ゴールである場合は次のマップへの処理を行う
         if (itemType == MapData.ITEM_TYPE_GOAL) {
             if (moveChara.GetItemInventory().contains(MapData.ITEM_TYPE_KEY)) {
                 PrintAction("CLEAR");
@@ -156,6 +172,7 @@ public class MapGameController implements Initializable {
                 alert.setContentText("Clear!");
                 alert.showAndWait();
                 moveChara.AddScore(1000);
+                // 残り時間は引き継がれないためスコアとして加算する
                 moveChara.AddScore(1000 + 10 * (int) mapData.GetRemainingTime());
                 RemapButtonAction();
             }
@@ -280,12 +297,14 @@ public class MapGameController implements Initializable {
      */
     public void OverButtonAction(ActionEvent actionEvent) {
         PrintAction("OVER");
-        Rank rank = rankData.SubmitScore("", moveChara.GetScore());
+        Rank rank = rankData.SubmitScore(moveChara.GetScore());
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setContentText("Game Over!\n" + "Score : " + rank.score + "\n" + "Rank : " + rank.rank);
         alert.showAndWait();
+        // キャラクターのスコアを初期化する
         moveChara.ResetScore();
+        // 次の残り時間を初期化する
         mapData.ResetTimeLimit();
         RemapButtonAction();
         mainAudioClip.stop();
@@ -293,11 +312,12 @@ public class MapGameController implements Initializable {
     }
 
     /**
-     * ランキングを表示する
+     * ランクを表示する
      */
     public void RankButtonAction(ActionEvent actionEvent) {
         PrintAction("RANK");
         String rankText = "";
+        // 10位までのランクを文字列に追加する
         ArrayList<Rank> rankList = rankData.GetRankList();
         for (int i = 0; i < Math.min(rankList.size(), 10); i++) {
             rankText += String.valueOf(i + 1) + " | " + rankList.get(i) + "\n";
@@ -306,7 +326,9 @@ public class MapGameController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText("Ranking\n" + rankText);
         alert.showAndWait();
+        // キャラクターのスコアを初期化する
         moveChara.ResetScore();
+        // 次の残り時間を初期化する
         mapData.ResetTimeLimit();
         RemapButtonAction();
         mainAudioClip.stop();

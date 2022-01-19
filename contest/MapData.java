@@ -52,23 +52,27 @@ public class MapData {
     MapData(int x, int y) {
         width = x;
         height = y;
-
+        // mapImagesに画像を入れる
         mapImages = new Image[mapImagePaths.length];
         for (int i = 0; i < mapImagePaths.length; i++) {
             mapImages[i] = new Image(mapImagePaths[i]);
         }
+        // mapTypesを初期化する
         mapTypes = new int[y][x];
-
+        // itemImagesに画像を入れる
         itemImages = new Image[itemImagePaths.length];
         for (int i = 0; i < itemImagePaths.length; i++) {
             itemImages[i] = new Image(itemImagePaths[i]);
         }
+        // itemTypesを初期化する
         itemTypes = new int[y][x];
-
+        // mapTypesを壁で埋める
         FillMapType(MAP_TYPE_WALL);
+        // 道を生成する
         DigMap(1, 3);
-
+        // itemTypesを空で埋める
         FillItemType(ITEM_TYPE_NULL);
+        // アイテムを配置する
         SetItemType(x - 2, y - 2, ITEM_TYPE_GOAL);
         SetItemTypeRandom(3, ITEM_TYPE_BOMB);
         SetItemTypeRandom(1, ITEM_TYPE_KEY);
@@ -76,9 +80,11 @@ public class MapData {
         SetItemTypeRandom(1, ITEM_TYPE_PORTAL);
         SetItemTypeRandom(3, ITEM_TYPE_TIME);
         SetItemTypeRandom(2, ITEM_TYPE_HACK);
-
+        // 時間制限を減らす
         TIME_LIMIT -= 5;
+        // 開始時刻を設定する
         startDate = new Date();
+        // 制限時間ズレを初期化する
         timeOffset = 0;
     }
 
@@ -89,9 +95,12 @@ public class MapData {
      * @param itemType  ItemType
      */
     private void SetItemTypeRandom(int itemCount, int itemType) {
+        // アイテムの数だけループする
         for (int i = 0; i < itemCount; i++) {
+            // ランダムなX, Y座標を生成する
             int tempX = (int) (Math.random() * width);
             int tempY = (int) (Math.random() * height);
+            // mapTypeが道であるかつitemTypeが空であるなら配置する
             if (GetMapType(tempX, tempY) == MAP_TYPE_SPACE && GetItemType(tempX, tempY) == ITEM_TYPE_NULL
                     && !(tempX == 1 && tempY == 1)) {
                 SetItemType(tempX, tempY, itemType);
@@ -125,6 +134,7 @@ public class MapData {
      * @return 残り時間
      */
     public long GetRemainingTime() {
+        // 制限時間 - (現在時刻 - 開始時刻) + 制限時間ズレを計算する
         return MapData.TIME_LIMIT - (((new Date().getTime()) - startDate.getTime()) / 1000) + timeOffset;
     }
 
@@ -180,6 +190,8 @@ public class MapData {
         if (CheckXY(x, y)) {
             return null;
         }
+        // itemTypesが空ならmapTypesの画像を返す
+        // itemTypesが空ではないならitemTypesの画像を返す
         if (itemTypes[y][x] == MapData.ITEM_TYPE_NULL) {
             return new ImageView(mapImages[mapTypes[y][x]]);
         } else {

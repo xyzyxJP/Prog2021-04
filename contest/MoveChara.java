@@ -40,11 +40,10 @@ public class MoveChara {
      */
     MoveChara(int startX, int startY, MapData mapData) {
         this.mapData = mapData;
-
+        // キャラクターの画像を読み込む
         charaImages = new Image[4][3];
         charaImageViews = new ImageView[4];
         charaImageAnimations = new ImageAnimation[4];
-
         for (int i = 0; i < 4; i++) {
             charaImages[i] = new Image[3];
             for (int j = 0; j < 3; j++) {
@@ -53,10 +52,8 @@ public class MoveChara {
             charaImageViews[i] = new ImageView(charaImages[i][0]);
             charaImageAnimations[i] = new ImageAnimation(charaImageViews[i], charaImages[i]);
         }
-
         positionX = startX;
         positionY = startY;
-
         SetCharaDirection(TYPE_RIGHT);
     }
 
@@ -194,11 +191,13 @@ public class MoveChara {
      * @return 使用できたか
      */
     public boolean UseItem(int itemType) {
+        // アイテムを所持しているかを確認する
         if (!itemInventory.contains(itemType)) {
             return false;
         }
         switch (itemType) {
             case MapData.ITEM_TYPE_BOMB:
+                // キャラクターが向いてる方向に壁があるかを確認する
                 if (!CanMove(charaDirection, 1)) {
                     itemInventory.remove(itemInventory.indexOf(itemType));
                     mapData.SetMapType(positionX + VECTORS[charaDirection][1],
@@ -208,6 +207,7 @@ public class MoveChara {
                 }
                 break;
             case MapData.ITEM_TYPE_HACK:
+                // キャラクターが向いている方向に壁があり、その奥が移動可能であるか確認する
                 if (!CanMove(charaDirection, 1) && CanMove(charaDirection, 2)) {
                     itemInventory.remove(itemInventory.indexOf(itemType));
                     Move(charaDirection, 2);
@@ -270,7 +270,6 @@ public class MoveChara {
             if (startTime == 0) {
                 startTime = now;
             }
-
             preCount = count;
             count = (now - startTime) / duration;
             if (preCount != count) {
