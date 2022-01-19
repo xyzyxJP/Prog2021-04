@@ -6,10 +6,12 @@
 
 # Documentation
 
-## GitHubの説明
-
-下記のリンクからコードをダウンロードして編集してください  
 [https://github.com/xyzyxJP/Prog2021-04/archive/refs/heads/main.zip](https://github.com/xyzyxJP/Prog2021-04/archive/refs/heads/main.zip)
+
+```
+javafxc -classpath lib/json-20211205.jar: *.java
+javafx -classpath lib/json-20211205.jar: MapGame
+```
 
 ## グループ課題の説明
 
