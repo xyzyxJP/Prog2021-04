@@ -316,6 +316,7 @@ public class MapGameController implements Initializable {
      */
     public void RankButtonAction(ActionEvent actionEvent) {
         PrintAction("RANK");
+        timer.cancel();
         String rankText = "";
         // 10位までのランクを文字列に追加する
         ArrayList<Rank> rankList = rankData.GetRankList();
