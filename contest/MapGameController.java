@@ -94,7 +94,6 @@ public class MapGameController implements Initializable {
                     long remainingTime = mapData.GetRemainingTime();
                     timeLabel.setText(String.valueOf(remainingTime));
                     if (remainingTime <= 0) {
-                        timer.cancel();
                         OverButtonAction(null);
                         return;
                     }
@@ -297,6 +296,7 @@ public class MapGameController implements Initializable {
      */
     public void OverButtonAction(ActionEvent actionEvent) {
         PrintAction("OVER");
+        timer.cancel();
         Rank rank = rankData.SubmitScore(moveChara.GetScore());
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText(null);
