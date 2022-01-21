@@ -166,6 +166,7 @@ public class MapGameController implements Initializable {
         if (itemType == MapData.ITEM_TYPE_GOAL) {
             if (moveChara.GetItemInventory().contains(MapData.ITEM_TYPE_KEY)) {
                 PrintAction("CLEAR");
+                timer.cancel();
                 clearAudioClip.play();
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setHeaderText(null);
