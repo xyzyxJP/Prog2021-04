@@ -167,14 +167,14 @@ public class MapGameController implements Initializable {
             if (moveChara.GetItemInventory().contains(MapData.ITEM_TYPE_KEY)) {
                 PrintAction("CLEAR");
                 timer.cancel();
+                moveChara.AddScore(1000);
+                // 残り時間は引き継がれないためスコアとして加算する
+                moveChara.AddScore(1000 + 10 * (int) mapData.GetRemainingTime());
                 clearAudioClip.play();
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setHeaderText(null);
                 alert.setContentText("Clear!");
                 alert.showAndWait();
-                moveChara.AddScore(1000);
-                // 残り時間は引き継がれないためスコアとして加算する
-                moveChara.AddScore(1000 + 10 * (int) mapData.GetRemainingTime());
                 RemapButtonAction();
             }
         }
