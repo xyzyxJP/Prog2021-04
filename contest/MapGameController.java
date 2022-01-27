@@ -35,71 +35,32 @@ public class MapGameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // 音声ファイルを読み込む
-        if (mainAudioClip == null) {
-            mainAudioClip = new AudioClip(getClass().getResource("audio/main.mp3").toExternalForm());
-            mainAudioClip.setCycleCount(AudioClip.INDEFINITE);
-            mainAudioClip.setVolume(0.02);
-            mainAudioClip.play();
-        }
-        if (itemAudioClip == null) {
-            itemAudioClip = new AudioClip(getClass().getResource("audio/item.mp3").toExternalForm());
-            itemAudioClip.setCycleCount(1);
-            itemAudioClip.setVolume(0.02);
-        }
-        if (coinAudioClip == null) {
-            coinAudioClip = new AudioClip(getClass().getResource("audio/coin.mp3").toExternalForm());
-            coinAudioClip.setCycleCount(1);
-            coinAudioClip.setVolume(0.02);
-        }
-        if (portalAudioClip == null) {
-            portalAudioClip = new AudioClip(getClass().getResource("audio/portal.mp3").toExternalForm());
-            portalAudioClip.setCycleCount(1);
-            portalAudioClip.setVolume(0.02);
-        }
-        if (bombAudioClip == null) {
-            bombAudioClip = new AudioClip(getClass().getResource("audio/bomb.mp3").toExternalForm());
-            bombAudioClip.setCycleCount(1);
-            bombAudioClip.setVolume(0.05);
-        }
-        if (hackAudioClip == null) {
-            hackAudioClip = new AudioClip(getClass().getResource("audio/hack.mp3").toExternalForm());
-            hackAudioClip.setCycleCount(1);
-            hackAudioClip.setVolume(0.05);
-        }
-        if (clearAudioClip == null) {
-            clearAudioClip = new AudioClip(getClass().getResource("audio/clear.mp3").toExternalForm());
-            clearAudioClip.setCycleCount(1);
-            clearAudioClip.setVolume(0.05);
-        }
+        mainAudioClip = new AudioClip(getClass().getResource("audio/main.mp3").toExternalForm());
+        mainAudioClip.setCycleCount(AudioClip.INDEFINITE);
+        mainAudioClip.setVolume(0.02);
+        mainAudioClip.play();
+        itemAudioClip = new AudioClip(getClass().getResource("audio/item.mp3").toExternalForm());
+        itemAudioClip.setCycleCount(1);
+        itemAudioClip.setVolume(0.02);
+        coinAudioClip = new AudioClip(getClass().getResource("audio/coin.mp3").toExternalForm());
+        coinAudioClip.setCycleCount(1);
+        coinAudioClip.setVolume(0.02);
+        portalAudioClip = new AudioClip(getClass().getResource("audio/portal.mp3").toExternalForm());
+        portalAudioClip.setCycleCount(1);
+        portalAudioClip.setVolume(0.02);
+        bombAudioClip = new AudioClip(getClass().getResource("audio/bomb.mp3").toExternalForm());
+        bombAudioClip.setCycleCount(1);
+        bombAudioClip.setVolume(0.05);
+        hackAudioClip = new AudioClip(getClass().getResource("audio/hack.mp3").toExternalForm());
+        hackAudioClip.setCycleCount(1);
+        hackAudioClip.setVolume(0.05);
+        clearAudioClip = new AudioClip(getClass().getResource("audio/clear.mp3").toExternalForm());
+        clearAudioClip.setCycleCount(1);
+        clearAudioClip.setVolume(0.05);
         // ランクを読み込む
-        if (rankData == null) {
-            rankData = new RankData();
-        }
-        // マップを生成する
-        mapData = new MapData(21, 15);
-        // キャラクターを生成する
-        moveChara = new MoveChara(1, 1, mapData);
-        // マップを描画する
-        DrawMap(moveChara, mapData);
-        // 制限時間表示タイマーを初期化する
-        if (timer != null) {
-            timer.cancel();
-        }
-        timer = new Timer();
-        // 0.5秒おきに残り時間を取得し表示する
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    long remainingTime = mapData.GetRemainingTime();
-                    timeLabel.setText(String.valueOf(remainingTime));
-                    if (remainingTime <= 0) {
-                        OverButtonAction(null);
-                        return;
-                    }
-                });
-            }
-        }, 0, 500);
+        rankData = new RankData();
+        // マップを初期化する
+        RemapButtonAction();
     }
 
     /**
@@ -262,7 +223,31 @@ public class MapGameController implements Initializable {
      */
     public void RemapButtonAction() {
         PrintAction("REMAP");
-        initialize(null, null);
+        // マップを生成する
+        mapData = new MapData(21, 15);
+        // キャラクターを生成する
+        moveChara = new MoveChara(1, 1, mapData);
+        // マップを描画する
+        DrawMap(moveChara, mapData);
+        // 制限時間表示タイマーを初期化する
+        if (timer != null) {
+            timer.cancel();
+        }
+        timer = new Timer();
+        // 0.5秒おきに残り時間を取得し表示する
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    long remainingTime = mapData.GetRemainingTime();
+                    timeLabel.setText(String.valueOf(remainingTime));
+                    if (remainingTime <= 0) {
+                        OverButtonAction(null);
+                        return;
+                    }
+                });
+            }
+        }, 0, 500);
     }
 
     /**
